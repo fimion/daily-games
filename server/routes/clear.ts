@@ -8,6 +8,6 @@ export default defineEventHandler(async (event) => {
         // @ts-ignore
         cookie: {secure: import.meta.env.DEV}
     });
-
-    return await useStorage("assets:server").getItem("index.html");
+    await session.update({lastID: undefined, lastAccessDay: undefined});
+    return sendRedirect(event, "/", 303);
 });

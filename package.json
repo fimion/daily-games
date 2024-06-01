@@ -7,6 +7,7 @@
     "preview": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@netlify/blobs": "latest",
     "nitropack": "latest"
   }
 }
