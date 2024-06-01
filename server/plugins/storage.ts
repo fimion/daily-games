@@ -1,12 +1,12 @@
 import netlifyBlobDriver from "unstorage/drivers/netlify-blobs";
 export default defineNitroPlugin(()=>{
     if(import.meta.env.PROD){
-        const {siteId, netlifyApiToken} = useRuntimeConfig();
+        const {netlify} = useRuntimeConfig();
         const storage = useStorage();
         storage.mount('db', netlifyBlobDriver({
-            name:"daily-games",
-            siteID: siteId,
-            token:netlifyApiToken,
+            siteID: constants.SITE_ID,
+            token: constants.NETLIFY_API_TOKEN,
+            deployID: process.env.DEPLOY_ID,
         }))
     }
 
