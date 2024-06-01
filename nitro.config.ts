@@ -11,7 +11,10 @@ export default defineNitroConfig({
     storage: {
         db: {
             driver: "netlifyBlobs",
-            name: "daily-games"
+            name: "daily-games",
+            deployScope: false,
+            siteID: import.meta.env.SITE_ID,
+            token: import.meta.env.NETLIFY_API_TOKEN
         }
     },
     // Development
