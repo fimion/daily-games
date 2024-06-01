@@ -1,6 +1,6 @@
 import {Storage} from "unstorage";
 import {EventHandlerRequest, H3Event} from "h3";
-
+import netlifyBlobDriver from "unstorage/drivers/netlify-blobs";
 type RaindropCollectionRef = {
     "$ref": string;
     "$id": number;
@@ -94,6 +94,11 @@ async function redirectUrl(url:{link:string, id:number}, event:H3Event<EventHand
         lastAccessDay: today(),
     })
     return sendRedirect(event,url.link, 303);
+}
+
+
+async function startStorage(){
+
 }
 
 export default defineEventHandler(async (event) => {
