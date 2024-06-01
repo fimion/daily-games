@@ -98,7 +98,7 @@ async function redirectUrl(url:{link:string, id:number}, event:H3Event<EventHand
 
 export default defineEventHandler(async (event) => {
     const {raindropApiToken, raindropGamesCollection, sessionPassword} = useRuntimeConfig()
-    const db = useStorage<GamesStorage>();
+    const db = useStorage<GamesStorage>("db");
 
     let session = await useSession<SessionData>(event, {
         password: sessionPassword,
