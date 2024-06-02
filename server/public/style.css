@@ -1,0 +1,22 @@
+@import url('/simple.min.css') layer(base);
+
+:root,::backdrop{
+  --sans-font: 'Comic Neue', 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root,
+  ::backdrop {
+    --accent: color-mix(in hsl, lightpink 100%, lightpink);
+    --accent-hover: color-mix(in hsl longer hue, lightpink, hotpink);
+  }
+}
+body{
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+}
+
+main{
+  max-width: 60ch;
+}
