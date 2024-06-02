@@ -5,11 +5,7 @@ export default defineNitroPlugin(async ()=>{
         const storage = useStorage();
         await storage.unmount('db');
         console.log(process.env);
-        storage.mount('db', netlifyBlobDriver({
-            siteID: constants.SITE_ID,
-            token: constants.NETLIFY_API_TOKEN,
-            deployID: process.env.DEPLOY_ID,
-        }))
+        storage.mount('db', netlifyBlobDriver())
     }
 
 })
