@@ -1,4 +1,4 @@
-@import url('/simple.min.css') layer(base);
+@import url('./simple.min.css') layer(base);
 
 :root,::backdrop{
   --sans-font: 'Comic Neue', 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;

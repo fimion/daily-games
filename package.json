@@ -3,14 +3,19 @@
   "engines": {
     "node": "20"
   },
+  "type": "module",
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
+    "lint": "eslint --fix ./",
     "prepare": "nitro prepare",
     "preview": "node .output/server/index.mjs"
   },
   "devDependencies": {
+    "@fimion/lint-config": "^1.0.1",
     "@netlify/blobs": "latest",
-    "nitropack": "latest"
+    "eslint": "^9.4.0",
+    "nitropack": "latest",
+    "prettier": "^3.3.1"
   }
 }

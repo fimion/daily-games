@@ -1,93 +1,92 @@
-import {Storage} from "unstorage";
+import { Storage } from "unstorage";
 
 export type RaindropCollectionRef = {
-    "$ref": string;
-    "$id": number;
-    "oid": number;
+	$ref: string;
+	$id: number;
+	oid: number;
 };
 
 export type RaindropMediaItem = {
-    "type": string;
-    "link": string;
-}
+	type: string;
+	link: string;
+};
 
 export type RaindropUserRef = {
-    "$ref": string;
-    "$id": number;
+	$ref: string;
+	$id: number;
 };
 
 export type RaindropCreatorRef = {
-    "_id": number;
-    "avatar": string;
-    "name": string;
-    "email": string;
+	_id: number;
+	avatar: string;
+	name: string;
+	email: string;
 };
 
 export type RaindropCacheRef = {
-    "status": string;
+	status: string;
 };
 
 export type RainDropItem = {
-    _id: number;
-    excerpt: string;
-    type: string;
-    "cover": string;
-    "tags": string[];
-    "removed": boolean;
-    "title": string;
-    "collection": RaindropCollectionRef;
-    "link": string;
-    "created": string;
-    "lastUpdate": string;
-    "important": boolean;
-    "media": RaindropMediaItem[];
-    "user": RaindropUserRef;
-    "domain": string;
-    "creatorRef": RaindropCreatorRef;
-    "sort": number;
-    "cache": RaindropCacheRef;
-    "note": string;
-    "highlights": string[];
-    "broken": boolean;
-    "collectionId": number;
-}
+	_id: number;
+	excerpt: string;
+	type: string;
+	cover: string;
+	tags: string[];
+	removed: boolean;
+	title: string;
+	collection: RaindropCollectionRef;
+	link: string;
+	created: string;
+	lastUpdate: string;
+	important: boolean;
+	media: RaindropMediaItem[];
+	user: RaindropUserRef;
+	domain: string;
+	creatorRef: RaindropCreatorRef;
+	sort: number;
+	cache: RaindropCacheRef;
+	note: string;
+	highlights: string[];
+	broken: boolean;
+	collectionId: number;
+};
 
 export type RaindropMultipleResponse = {
-    result: boolean;
-    items: RainDropItem[];
-    count: number;
-    collectionId: number;
-}
+	result: boolean;
+	items: RainDropItem[];
+	count: number;
+	collectionId: number;
+};
 
 export type GamesStorage = RainDropItem[];
 
 export type MyMeta = {
-    cacheTime: number;
-}
+	cacheTime: number;
+};
 
 export async function isExpired(db: Storage<GamesStorage>) {
-    const now = Date.now();
-    const cacheTime = (await db.getMeta('games') as MyMeta).cacheTime;
-    return now - cacheTime > 24 * 60 * 60 * 1000;
+	const now = Date.now();
+	const cacheTime = ((await db.getMeta("games")) as MyMeta).cacheTime;
+	return now - cacheTime > 24 * 60 * 60 * 1000;
 }
 
-
-export async function useGames(){
-    const {raindropApiToken, raindropGamesCollection} = useRuntimeConfig()
-    const db = useStorage<GamesStorage>("db")
-    if (!await db.hasItem('games') || await isExpired(db)) {
-
-        const result = await $fetch<RaindropMultipleResponse>(
-            `https://api.raindrop.io/rest/v1/raindrops/${raindropGamesCollection}`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${raindropApiToken}`,
-                }
-            });
-        if (result.result) {
-            await db.setItem('games', result.items)
-            await db.setMeta('games', {cacheTime: Date.now()});
-        }
-    }
-    return db;
+export async function useGames() {
+	const { raindropApiToken, raindropGamesCollection } = useRuntimeConfig();
+	const db = useStorage<GamesStorage>("db");
+	if (!(await db.hasItem("games")) || (await isExpired(db))) {
+		const result = await $fetch<RaindropMultipleResponse>(
+			`https://api.raindrop.io/rest/v1/raindrops/${raindropGamesCollection}`,
+			{
+				headers: {
+					Authorization: `Bearer ${raindropApiToken}`,
+				},
+			},
+		);
+		if (result.result) {
+			await db.setItem("games", result.items);
+			await db.setMeta("games", { cacheTime: Date.now() });
+		}
+	}
+	return db;
 }
