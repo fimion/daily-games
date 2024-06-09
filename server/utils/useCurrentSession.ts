@@ -33,7 +33,7 @@ export async function useCurrentSession(event: H3Event<EventHandlerRequest>) {
 		password: sessionPassword,
 		cookie: {
 			secure: import.meta.env.DEV,
-			maxAge: 1000 * 60 * 60 * 24,
+			maxAge: 60 * 60 * 24, // seconds
 		},
 	});
 }
