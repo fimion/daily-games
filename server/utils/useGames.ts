@@ -71,9 +71,18 @@ export async function isExpired(db: Storage<GamesStorage>) {
 	return now - cacheTime > 24 * 60 * 60 * 1000;
 }
 
-export async function useGames() {
+export type GamesListItem = {
+	name: string;
+	description: string;
+	link: string;
+	id: number;
+	tags: string[];
+};
+
+export async function useGames(): Promise<GamesListItem[]> {
 	const { raindropApiToken, raindropGamesCollection } = useRuntimeConfig();
 	const db = useStorage<GamesStorage>("db");
+	let items: RainDropItem[] = [];
 	if (!(await db.hasItem("games")) || (await isExpired(db))) {
 		const result = await $fetch<RaindropMultipleResponse>(
 			`https://api.raindrop.io/rest/v1/raindrops/${raindropGamesCollection}`,
@@ -86,7 +95,17 @@ export async function useGames() {
 		if (result.result) {
 			await db.setItem("games", result.items);
 			await db.setMeta("games", { cacheTime: Date.now() });
+			items = result.items;
 		}
+	} else if (await db.hasItem("games")) {
+		items = (await db.getItem<RainDropItem[]>("games"))!;
 	}
-	return db;
+
+	return items.map((el) => ({
+		link: el.link,
+		id: el._id,
+		tags: el.tags,
+		name: el.title,
+		description: el.note,
+	}));
 }

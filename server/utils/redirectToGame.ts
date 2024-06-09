@@ -1,12 +1,10 @@
 import type { EventHandlerRequest, H3Event } from "h3";
 import type { CurrentSessionHandler } from "~/utils/useCurrentSession.ts";
-
-export function today() {
-	return Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-}
+import { today } from "~/utils/dateFuncs.ts";
+import { GamesListItem } from "~/utils/useGames.ts";
 
 export async function redirectToGame(
-	url: { link: string; id: number },
+	url: GamesListItem,
 	event: H3Event<EventHandlerRequest>,
 	session: CurrentSessionHandler,
 ) {

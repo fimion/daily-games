@@ -1,7 +1,23 @@
 import { useCurrentSession } from "~/utils/useCurrentSession.ts";
 import { useLayout } from "~/utils/useLayout.ts";
+import { GamesListItem } from "~/utils/useGames.ts";
+import { filterByTodaysGames } from "~/utils/dateFuncs.ts";
 
 export default defineEventHandler(async (event) => {
+	const query = getQuery(event);
+	console.log(query);
 	await useCurrentSession(event);
-	return await useLayout("index");
+	const items = (await useGames()).filter(filterByTodaysGames);
+
+	const listItem = (item: GamesListItem) => `<li>
+		<a href="/jumpTo?id=${item.id}" target="_blank">${item.name}</a> ( #${item.tags.join(", #")} )
+	</li>`;
+
+	const content = `<details>
+			<summary>Jump to a game</summary>
+			<ol>
+					${items.map(listItem).join("")}
+			</ol>
+		</details>`;
+	return await useLayout("index", content);
 });
