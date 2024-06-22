@@ -1,6 +1,6 @@
 import { useCurrentSession } from "~/utils/useCurrentSession.ts";
 import { useLayout } from "~/utils/useLayout.ts";
-import { GamesListItem } from "~/utils/useGames.ts";
+import { StoredLinkItem } from "~/utils/useGames.ts";
 import { filterByTodaysGames } from "~/utils/dateFuncs.ts";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
 	await useCurrentSession(event);
 	const items = (await useGames()).filter(filterByTodaysGames);
 
-	const listItem = (item: GamesListItem) => `<li>
+	const listItem = (item: StoredLinkItem) => `<li>
 		<a href="/jumpTo?id=${item.id}" target="_blank">${item.name}</a> ( #${item.tags.join(", #")} )
 	</li>`;
 

@@ -1,4 +1,5 @@
 import { Storage } from "unstorage";
+import { $fetch, type FetchOptions } from "ofetch";
 
 export type RaindropCollectionRef = {
 	$ref: string;
@@ -59,46 +60,49 @@ export type RaindropMultipleResponse = {
 	collectionId: number;
 };
 
-export type GamesStorage = RainDropItem[];
+export type StoredLinkStorage = RainDropItem[];
 
 export type MyMeta = {
 	cacheTime: number;
 };
 
-export async function isExpired(db: Storage<GamesStorage>) {
+export async function isExpired(db: Storage<StoredLinkStorage>, key: string) {
 	const now = Date.now();
-	const cacheTime = ((await db.getMeta("games")) as MyMeta).cacheTime;
+	const cacheTime = ((await db.getMeta(key)) as MyMeta).cacheTime;
 	return now - cacheTime > 24 * 60 * 60 * 1000;
 }
 
-export type GamesListItem = {
+export type StoredLinkItem = {
 	name: string;
 	description: string;
 	link: string;
 	id: number;
 	tags: string[];
+	order: number;
 };
 
-export async function useGames(): Promise<GamesListItem[]> {
-	const { raindropApiToken, raindropGamesCollection } = useRuntimeConfig();
-	const db = useStorage<GamesStorage>("db");
+async function useStoredLinkItems(
+	key: string,
+	collection: string,
+	options: FetchOptions<"json"> = {},
+): Promise<StoredLinkItem[]> {
+	const { raindropApiToken } = useRuntimeConfig();
+	const db = useStorage<StoredLinkStorage>("db");
 	let items: RainDropItem[] = [];
-	if (!(await db.hasItem("games")) || (await isExpired(db))) {
-		const result = await $fetch<RaindropMultipleResponse>(
-			`https://api.raindrop.io/rest/v1/raindrops/${raindropGamesCollection}`,
-			{
-				headers: {
-					Authorization: `Bearer ${raindropApiToken}`,
-				},
+	if (!(await db.hasItem(key)) || (await isExpired(db, key))) {
+		const result = await $fetch<RaindropMultipleResponse>(`https://api.raindrop.io/rest/v1/raindrops/${collection}`, {
+			...options,
+			headers: {
+				Authorization: `Bearer ${raindropApiToken}`,
 			},
-		);
+		});
 		if (result.result) {
-			await db.setItem("games", result.items);
-			await db.setMeta("games", { cacheTime: Date.now() });
+			await db.setItem(key, result.items);
+			await db.setMeta(key, { cacheTime: Date.now() });
 			items = result.items;
 		}
-	} else if (await db.hasItem("games")) {
-		items = (await db.getItem<RainDropItem[]>("games"))!;
+	} else if (await db.hasItem(key)) {
+		items = (await db.getItem<RainDropItem[]>(key))!;
 	}
 
 	return items.map((el) => ({
@@ -107,5 +111,15 @@ export async function useGames(): Promise<GamesListItem[]> {
 		tags: el.tags,
 		name: el.title,
 		description: el.note,
+		order: el.sort,
 	}));
+}
+
+export async function useShops(): Promise<StoredLinkItem[]> {
+	return useStoredLinkItems("shops", "0", { query: { search: "#daily/shops" } });
+}
+
+export async function useGames(): Promise<StoredLinkItem[]> {
+	const { raindropGamesCollection } = useRuntimeConfig();
+	return useStoredLinkItems("games", raindropGamesCollection);
 }
