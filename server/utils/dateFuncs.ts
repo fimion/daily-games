@@ -1,4 +1,4 @@
-import { StoredLinkItem } from "~/utils/useGames.ts";
+import { type StoredLinkItem } from "~/utils/storedLinks.ts";
 
 export function today() {
 	return Math.floor(Date.now() / (1000 * 60 * 60 * 24));

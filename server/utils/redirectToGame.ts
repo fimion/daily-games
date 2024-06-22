@@ -1,7 +1,7 @@
 import type { EventHandlerRequest, H3Event } from "h3";
 import type { CurrentSessionHandler } from "~/utils/useCurrentSession.ts";
 import { today } from "~/utils/dateFuncs.ts";
-import { StoredLinkItem } from "~/utils/useGames.ts";
+import { type StoredLinkItem } from "~/utils/storedLinks.ts";
 
 export async function redirectToGame(
 	url: StoredLinkItem,

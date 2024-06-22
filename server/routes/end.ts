@@ -1,6 +1,6 @@
 import { useCurrentSession } from "~/utils/useCurrentSession.ts";
 import { useLayout } from "~/utils/useLayout.ts";
-import { useShops } from "~/utils/useGames.ts";
+import { useShops } from "~/utils/storedLinks.ts";
 
 export default defineEventHandler(async (event) => {
 	await useCurrentSession(event);

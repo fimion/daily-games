@@ -1,6 +1,6 @@
 import { useCurrentSession } from "~/utils/useCurrentSession.ts";
 import { useLayout } from "~/utils/useLayout.ts";
-import { StoredLinkItem } from "~/utils/useGames.ts";
+import { StoredLinkItem } from "~/utils/storedLinks.ts";
 import { filterByTodaysGames } from "~/utils/dateFuncs.ts";
 
 export default defineEventHandler(async (event) => {

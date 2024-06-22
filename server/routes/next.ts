@@ -1,4 +1,4 @@
-import { useGames } from "~/utils/useGames.ts";
+import { useGames } from "~/utils/storedLinks.ts";
 import { useCurrentSession } from "~/utils/useCurrentSession.ts";
 import { redirectToGame } from "~/utils/redirectToGame.ts";
 import { today, filterByTodaysGames } from "~/utils/dateFuncs.ts";
