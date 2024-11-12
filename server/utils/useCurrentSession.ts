@@ -1,4 +1,5 @@
 import { EventHandlerRequest, H3Event, type SessionData } from "h3";
+import { TIME_IN_MS } from "#imports";
 
 export type CurrentSessionData = {
 	lastID?: number;
@@ -33,7 +34,7 @@ export async function useCurrentSession(event: H3Event<EventHandlerRequest>) {
 		password: sessionPassword,
 		cookie: {
 			secure: import.meta.env.DEV,
-			maxAge: 60 * 60 * 24, // seconds
+			maxAge: TIME_IN_MS.ONE_DAY / 1000, // seconds
 		},
 	});
 }

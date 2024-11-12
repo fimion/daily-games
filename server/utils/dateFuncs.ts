@@ -1,7 +1,12 @@
 import { type StoredLinkItem } from "~/utils/storedLinks.ts";
 
+export const TIME_IN_MS = {
+	SIX_HOURS: 6 * 60 * 60 * 1000,
+	ONE_DAY: 24 * 60 * 60 * 1000,
+};
+
 export function today() {
-	return Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+	return Math.floor(Date.now() / TIME_IN_MS.ONE_DAY);
 }
 
 export const WeeklyTags = [

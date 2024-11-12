@@ -1,5 +1,6 @@
 import { Storage } from "unstorage";
 import { $fetch, type FetchOptions } from "ofetch";
+import { TIME_IN_MS } from "#imports";
 
 export type RaindropCollectionRef = {
 	$ref: string;
@@ -69,7 +70,7 @@ export type MyMeta = {
 export async function isExpired(db: Storage<StoredLinkStorage>, key: string) {
 	const now = Date.now();
 	const cacheTime = ((await db.getMeta(key)) as MyMeta).cacheTime;
-	return now - cacheTime > 24 * 60 * 60 * 1000;
+	return now - cacheTime > TIME_IN_MS.SIX_HOURS;
 }
 
 export type StoredLinkItem = {
