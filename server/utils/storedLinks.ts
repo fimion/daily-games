@@ -106,14 +106,18 @@ async function useStoredLinkItems(
 		items = (await db.getItem<RainDropItem[]>(key))!;
 	}
 
-	return items.map((el) => ({
-		link: el.link,
-		id: el._id,
-		tags: el.tags,
-		name: el.title,
-		description: el.note,
-		order: el.sort,
-	}));
+	return items
+		.map((el) => ({
+			link: el.link,
+			id: el._id,
+			tags: el.tags,
+			name: el.title,
+			description: el.note,
+			order: el.sort,
+		}))
+		.sort((a, b) => {
+			return Math.sign(a.order - b.order);
+		});
 }
 
 export async function useShops(): Promise<StoredLinkItem[]> {
