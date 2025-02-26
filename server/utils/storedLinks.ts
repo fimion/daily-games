@@ -116,7 +116,7 @@ async function useStoredLinkItems(
 			order: el.sort,
 		}))
 		.sort((a, b) => {
-			return Math.sign(a.order - b.order);
+			return Math.sign(b.order - a.order);
 		});
 }
 
