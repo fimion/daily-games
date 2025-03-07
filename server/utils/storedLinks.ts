@@ -126,5 +126,5 @@ export async function useShops(): Promise<StoredLinkItem[]> {
 
 export async function useGames(): Promise<StoredLinkItem[]> {
 	const { raindropGamesCollection } = useRuntimeConfig();
-	return useStoredLinkItems("games", raindropGamesCollection);
+	return useStoredLinkItems("games", "0", { query: { search: "#daily/games"} });
 }
