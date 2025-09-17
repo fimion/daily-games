@@ -1,6 +1,8 @@
 import { Storage } from "unstorage";
-import { $fetch, type FetchOptions } from "ofetch";
+import {$fetch, type ResponseType} from "ofetch";
 import { TIME_IN_MS } from "#imports";
+
+type FetchOptions<R extends ResponseType = "json"> = Parameters<typeof $fetch<any, R>>[1];
 
 export type RaindropCollectionRef = {
 	$ref: string;
@@ -85,7 +87,7 @@ export type StoredLinkItem = {
 async function useStoredLinkItems(
 	key: string,
 	collection: string,
-	options: FetchOptions<"json"> = {},
+	options: FetchOptions = {},
 ): Promise<StoredLinkItem[]> {
 	const { raindropApiToken } = useRuntimeConfig();
 	const db = useStorage<StoredLinkStorage>("db");
@@ -121,10 +123,9 @@ async function useStoredLinkItems(
 }
 
 export async function useShops(): Promise<StoredLinkItem[]> {
-	return useStoredLinkItems("shops", "0", { query: { search: "#daily/shops" } });
+	return useStoredLinkItems("shops", "0", { query: { search: "#daily/shops", perpage: 50 } });
 }
 
 export async function useGames(): Promise<StoredLinkItem[]> {
-	const { raindropGamesCollection } = useRuntimeConfig();
-	return useStoredLinkItems("games", "0", { query: { search: "#daily/games"} });
+	return useStoredLinkItems("games", "0", { query: { search: "#daily/games", perpage: 50} });
 }
